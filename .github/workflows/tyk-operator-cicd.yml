@@ -43,7 +43,7 @@ jobs:
       - name: Checkout  
         uses: actions/checkout@v3
         
-      # Step 2: Set AWS credentials to connect EKS Cluster
+      # Step 2: Set AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -72,11 +72,12 @@ jobs:
           ls -l ./crds
       
       # Step 5: Validate kubectl install
-      - name: Check kubectl version
+      - name: Connect to EKS
         run: |
           kubectl version --client --output=yaml
           aws --version
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
+          kubectl get svc
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
