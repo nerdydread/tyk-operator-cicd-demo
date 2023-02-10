@@ -77,14 +77,14 @@ jobs:
       # Step 5: Retrieve the current list of CRDs
       - name: Retrieve current deployed CRDs for APIs and Policies
         run: |
-          echo "Retrieving current deployed APIs and Policies
+          echo "Retrieving current deployed APIs and Policies"
           kubectl get tykapis
           kubectl get tykpolicies
           
       # Step 6: Deploy CRDs based on path
       - name: Deploy CRDs for APIs and Policies
         run: |
-          echo "Applying CRDs for APIs and Policies
+          echo "Applying CRDs for APIs and Policies"
           kubectl apply -f crds/
           kubectl get tykapis
           kubectl get tykpolicies
