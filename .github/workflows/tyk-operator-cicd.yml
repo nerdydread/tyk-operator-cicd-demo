@@ -74,8 +74,7 @@ jobs:
       # Step 5: Validate kubectl install
       - name: Check kubectl version
         run: |
-          kubectl version --client --output=yaml
-          kubectl get pods --all-namespaces
+          kubectl version --client --output=yaml && kubectl get pods
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
