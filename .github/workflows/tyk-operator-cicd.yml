@@ -76,8 +76,7 @@ jobs:
         run: |
           kubectl version --client --output=yaml
           aws --version
-          aws sts get-caller-identity
-          kubectl get pods --kubeconfig ${{ secrets.KUBECONFIG }}
+          aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
