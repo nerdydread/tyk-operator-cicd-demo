@@ -1,6 +1,6 @@
 # Very basic workflow that will be triggered on any push activities done to the "master/main" branch.
 # Name of the workflow -- describing the workflow
-name: Tyk-Operator-CI
+name: deploy-crds-tyk-operator
 
 # Event/events -- an event used to trigger this workflow. Everytime someone pushed to master branch, this workflow
 # will get triggered/
@@ -13,28 +13,28 @@ env:
 
 # Jobs that are executed based on the events above.
 jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       # Step 1: Predefined action used to checkout the repository/code. 
+#       # Predefined/precreated actions are hosted. 
+#       -
+#         name: Checkout 
+#         uses: actions/checkout@v3
+#       # Step 2: Connect to my EKS cluster where tyk-operator is deployed and apply the CRDs stored in my source
+#       # of truth (GitHub)
+#       -
+#         name: Deployment
+#         uses: Pablommr/kubernetes-eks@v1.2.0
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           KUBECONFIG: ${{ secrets.KUBECONFIG }}
+#           KUBE_YAML: crds/
+#       -
+#         name: Checkfiles
+#         run: ls -l
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      # Step 1: Predefined action used to checkout the repository/code. 
-      # Predefined/precreated actions are hosted. 
-      -
-        name: Checkout 
-        uses: actions/checkout@v3
-      # Step 2: Connect to my EKS cluster where tyk-operator is deployed and apply the CRDs stored in my source
-      # of truth (GitHub)
-      -
-        name: Deployment
-        uses: Pablommr/kubernetes-eks@v1.2.0
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
-          KUBE_YAML: crds/
-      -
-        name: Checkfiles
-        run: ls -l
-  test:
     runs-on: ubuntu-latest
     
     steps:
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout  
         uses: actions/checkout@v3
         
-      # Step 2: Set AWS credentials
+      # Step 2: Set AWS credentials to connect EKS Cluster
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -69,3 +69,16 @@ jobs:
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
           echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
+      
+      # Step 5: Validate kubectl install
+      - name: Check kubectl version
+        run: |
+          kubectl version --client --output=yaml
+
+      # Step 6: Check if the crds exists
+      - name: List crds and apply them
+        run : |
+          ls -l ./crds \
+          && kubectl apply -f ./crds \
+          && kubectl get tykapis \
+          && kubectl get tykpolicies
