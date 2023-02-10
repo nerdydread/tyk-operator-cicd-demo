@@ -50,13 +50,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          
-#       # Step 3: Connect to Amazon ECR
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
       
-      # Step 4: Install kubectl
+      # Step 3: Install kubectl
       - name: Install and configure kubectl
         run: |
           VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -70,19 +65,22 @@ jobs:
           sudo mv kubectl /usr/local/bin/
           echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
           ls -l ./crds
-      
-      # Step 5: Validate kubectl install
-      - name: Connect to EKS
-        run: |
           kubectl version --client --output=yaml
+      
+      # Step 4: Connect to Tyk Opeartor hosted on EKS Cluster
+      - name: Connect to Tyk Operator
+        run: |
           aws --version
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
           kubectl get svc
+          
+      # Step 5: Deploy CRDs based on path
+      - name: Deploy CRDs for APIs and Policies
+        run: |
+          echo "Retrieving current deployed APIs and Policies
           kubectl get tykapis
           kubectl get tykpolicies
-
-      # Step 6: Check if the crds exists
-#       - name: List crds and apply them
-#         run : |
-#           ls -l ./crds \
-#           && kubectl get svc
+          echo "Applying CRDs for APIs and Policies
+          kubectl apply -f crds/
+          kubectl get tykapis
+          kubectl get tykpolicies
