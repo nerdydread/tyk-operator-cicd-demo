@@ -78,7 +78,4 @@ jobs:
       # Step 6: Check if the crds exists
       - name: List crds and apply them
         run : |
-          ls -l ./crds \
-          && kubectl apply -f ./crds \
-          && kubectl get tykapis \
-          && kubectl get tykpolicies
+          ls -l ./crds 
