@@ -70,13 +70,12 @@ jobs:
           sudo mv kubectl /usr/local/bin/
           echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
           ls -l ./crds
-          kubectl get svc
-          kubectl get tykapis
       
       # Step 5: Validate kubectl install
       - name: Check kubectl version
         run: |
           kubectl version --client --output=yaml
+          kubectl get pods --all-namespaces
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
