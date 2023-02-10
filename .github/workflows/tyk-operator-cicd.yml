@@ -78,6 +78,8 @@ jobs:
           aws --version
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
           kubectl get svc
+          kubectl get tykapis
+          kubectl get tykpolicies
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
