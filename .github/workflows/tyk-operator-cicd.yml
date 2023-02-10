@@ -28,3 +28,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
           KUBE_YAML: crds/
+      -
+        name: Checkfiles
+        run: ls -l
