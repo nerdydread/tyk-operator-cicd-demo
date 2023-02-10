@@ -1,17 +1,25 @@
-
+# Very basic workflow that will be triggered on any push activities done to the "master/main" branch.
+# Name of the workflow -- describing the workflow
 name: Tyk-Operator-CI
 
+# Event/events -- an event used to trigger this workflow. Everytime someone pushed to master branch, this workflow
+# will get triggered/
 on:
   push:
     branches: [ main ]
 
+# Jobs that are executed based on the events above.
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Predefined action used to checkout the repository/code. 
+      # Predefined/precreated actions are hosted. 
       -
         name: Checkout 
         uses: actions/checkout@v3
+      # Step 2: Connect to my EKS cluster where tyk-operator is deployed and apply the CRDs stored in my source
+      # of truth (GitHub)
       -
         name: Deployment
         uses: Pablommr/kubernetes-eks@v1.2.0
