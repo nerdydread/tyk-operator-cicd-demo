@@ -76,6 +76,7 @@ jobs:
         run: |
           kubectl version --client --output=yaml
           aws --version
+          aws sts get-caller-identity
 
       # Step 6: Check if the crds exists
 #       - name: List crds and apply them
