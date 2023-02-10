@@ -7,6 +7,9 @@ name: Tyk-Operator-CI
 on:
   push:
     branches: [ main ]
+    
+env: 
+  AWS_REGION: eu-east-2
 
 # Jobs that are executed based on the events above.
 jobs:
@@ -31,3 +34,38 @@ jobs:
       -
         name: Checkfiles
         run: ls -l
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Predefined action used to checkout the repository/code. 
+      # Predefined/precreated actions are hosted. 
+      - name: Checkout  
+        uses: actions/checkout@v3
+        
+      # Step 2: Set AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      # Step 3: Connect to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      # Step 4: Install kubectl
+      - name: Install and configure kubectl
+        run: |
+          VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+          # https://github.com/aws/aws-cli/issues/6920#issuecomment-1117981158
+          VERSION=v1.23.6
+          curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
+            --progress-bar \
+            --location \
+            --remote-name
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
