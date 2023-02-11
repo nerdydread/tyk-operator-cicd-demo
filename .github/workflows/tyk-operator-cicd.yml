@@ -43,7 +43,7 @@ jobs:
       - name: Checkout  
         uses: actions/checkout@v3
         
-      # Step 2: Set AWS credentials
+      # Step 2: Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -74,17 +74,17 @@ jobs:
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
           kubectl get svc
           
-      # Step 5: Retrieve the current list of CRDs
+      # Step 5: Retrieve old, deploy, and retrive new CRDs
       - name: Retrieve current deployed CRDs for APIs and Policies
         run: |
-          echo "Retrieving current deployed APIs and Policies"
+          echo "Current deployed APIs and Policies"
           kubectl get tykapis
           kubectl get tykpolicies
           
       # Step 6: Deploy CRDs based on path
       - name: Deploy CRDs for APIs and Policies
         run: |
-          echo "Applying CRDs for APIs and Policies"
+          echo "Updated deployed APIs and Policies"
           kubectl apply -f crds/
           kubectl get tykapis
           kubectl get tykpolicies
