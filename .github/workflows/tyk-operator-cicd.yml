@@ -68,11 +68,11 @@ jobs:
           kubectl version --client --output=yaml
           
       # Step 4: Install JQ
-      - name: Extract version from package.json
+      - name: Instal JQ
         uses: sergeysova/jq-action@v2
         id: version
         with:
-          cmd: 'jq .version package.json -r'
+          cmd: 'echo "version ${{ steps.version.outputs.value }}"'
       
       # Step 5: Connect to Tyk Opeartor hosted on EKS Cluster
       - name: Connect to Tyk Operator
