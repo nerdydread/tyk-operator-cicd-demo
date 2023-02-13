@@ -88,15 +88,15 @@ jobs:
           kubectl get tykapis
           kubectl get tykpolicies
           
-     # Step 7: Deploy CRDs
-      - name: Retrieve current deployed CRDs for APIs and Policies
+     # Step 7: Deploy CRDs - tykapis and tykpolicies
+      - name: Deploy CRDs
         run: |
           echo "Updated deployed APIs and Policies"
           kubectl apply -f crds/
           kubectl get tykapis
           kubectl get tykpolicies
           
-      # Step 7: Clean up tykapis and tykpolicies
+      # Step 8: Clean CRDs - tykapis and tyk poloicies
       - name: Deploy CRDs for APIs and Policies
         run: |
           chmod +x ./clean-up.sh

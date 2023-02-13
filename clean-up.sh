@@ -6,10 +6,10 @@ files=(crds/*)
 curr_apis=()
 
 # Retrieve apis
-apis=( $(kubectl get tykapis -o json | jq -r '.items[].metadata.name') )
+apis=( $(sudo kubectl get tykapis -o json | jq -r '.items[].metadata.name') )
 
 # Retrieve policies
-policies=( $(kubectl get tykpolicies -o json | jq -r '.items[].metadata.name') )
+policies=( $(sudo kubectl get tykpolicies -o json | jq -r '.items[].metadata.name') )
 
 
 for file in "${files[@]}"; do
