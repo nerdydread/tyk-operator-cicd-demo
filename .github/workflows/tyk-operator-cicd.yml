@@ -99,5 +99,6 @@ jobs:
       # Step 8: Clean CRDs - tykapis and tyk poloicies
       - name: Cleanup CRDs
         run: |
+          kubectl get tykapis -o json | jq -r '.items[].metadata.name'
           sudo chmod +x ./clean-up.sh
           sudo ./clean-up.sh
