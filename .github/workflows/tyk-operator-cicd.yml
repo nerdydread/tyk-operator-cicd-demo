@@ -100,5 +100,5 @@ jobs:
       - name: Cleanup CRDs
         run: |
           kubectl get tykapis -o json | jq -r '.items[].metadata.name'
-          sudo chmod +x ./clean-up.sh
-          sudo ./clean-up.sh
+          chmod +x ./clean-up.sh
+          ./clean-up.sh
