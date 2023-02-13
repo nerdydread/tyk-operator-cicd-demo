@@ -66,25 +66,34 @@ jobs:
           echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
           ls -l ./crds
           kubectl version --client --output=yaml
+          
+      # Step 4: Install JQ
+      - name: Extract version from package.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version package.json -r'
       
-      # Step 4: Connect to Tyk Opeartor hosted on EKS Cluster
+      # Step 5: Connect to Tyk Opeartor hosted on EKS Cluster
       - name: Connect to Tyk Operator
         run: |
           aws --version
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
           kubectl get svc
           
-      # Step 5: Retrieve old, deploy, and retrive new CRDs
+      # Step 6: Retrieve old, deploy, and retrive new CRDs
       - name: Retrieve current deployed CRDs for APIs and Policies
         run: |
           echo "Current deployed APIs and Policies"
           kubectl get tykapis
           kubectl get tykpolicies
-          
-      # Step 6: Deploy CRDs based on path
-      - name: Deploy CRDs for APIs and Policies
-        run: |
           echo "Updated deployed APIs and Policies"
           kubectl apply -f crds/
           kubectl get tykapis
           kubectl get tykpolicies
+          
+      # Step 7: Clean up tykapis and tykpolicies
+      - name: Deploy CRDs for APIs and Policies
+        run: |
+          chmod +x ./clean-up.sh
+          sudo ./clean-up.sh
