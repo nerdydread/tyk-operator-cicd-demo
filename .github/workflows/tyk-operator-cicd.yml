@@ -97,7 +97,7 @@ jobs:
           kubectl get tykpolicies
           
       # Step 8: Clean CRDs - tykapis and tyk poloicies
-      - name: Deploy CRDs for APIs and Policies
+      - name: Cleanup CRDs
         run: |
-          chmod +x ./clean-up.sh
+          sudo chmod +x ./clean-up.sh
           sudo ./clean-up.sh
