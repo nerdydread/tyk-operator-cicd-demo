@@ -100,8 +100,8 @@ jobs:
           chmod +x ./clean-up.sh
           ./clean-up.sh
           
-      # Step 9: Deploy CRDs - tykapis and tykpolicies
-      - name: Deploy CRDs
+      # Step 9: Validate & Deploy CRDs - tykapis and tykpolicies
+      - name: Validate & Deploy CRDs
         run: |
           chmod +x ./deploy.sh
           ./deploy.sh

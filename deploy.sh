@@ -5,11 +5,11 @@ validation=$(kubectl apply -f crds --dry-run=server 2>&1)
 
 if [[ "$validation" == *"error"* ]]
 then
-    echo "Validation failed:"
+    echo "Validation failed!"
     echo $validation
     exit 1
 else
-    echo "Validation success: deploying APIs and Policies..."
+    echo "Validation success!"
     kubectl apply -f crds/
     kubectl get tykapis
     kubectl get tykpolicies
