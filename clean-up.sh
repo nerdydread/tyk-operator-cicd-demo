@@ -43,13 +43,13 @@ for api in "${apis[@]}"; do
     echo "Syncing deployement with source of truth for $api"
     # Check if the api exists in the source of truth
     if [[ " ${curr_apis_policies[*]} " =~ " ${api} " ]]
-        then
-            # API found in source of truth
-            echo "API FOUND"
-        else
-            # API not found in source of truth
-            echo "API NOT FOUND: Cleaning up api..."
-            kubectl get tykapis $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
+    then
+        # API found in source of truth
+        echo "API FOUND"
+    else
+        # API not found in source of truth
+        echo "API NOT FOUND: Cleaning up api..."
+        kubectl get tykapis $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
     fi
 done
 
@@ -58,12 +58,12 @@ for policy in "${policies[@]}"; do
     echo "Syncing deployement with source of truth for $policy"
     # Check if the policy exists in the source of truth
     if [[ " ${curr_apis_policies[*]} " =~ " ${policy} " ]]
-        then
-            # Policy found in source of truth
-            echo "POLICY FOUND"
-        else
-            # Policy not found in source of truth
-            echo "POLICY NOT FOUND: Cleaning up policy..."
-            kubectl get tykpolicies $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
+    then
+        # Policy found in source of truth
+        echo "POLICY FOUND"
+    else
+        # Policy not found in source of truth
+        echo "POLICY NOT FOUND: Cleaning up policy..."
+        kubectl get tykpolicies $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
     fi
 done
