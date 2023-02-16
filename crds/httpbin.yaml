@@ -1,10 +1,10 @@
 apiVersion: tyk.tyk.io/v1alpha1
 kind: ApiDefinition
 metadata:
-            name: httpbin
+  name: httpbin
 spec:
   name: httpbin
-  use_keyless: "true"
+  use_keyless: true
   protocol: http
   active: true
   proxy:
