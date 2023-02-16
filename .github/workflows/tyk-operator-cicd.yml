@@ -77,9 +77,9 @@ jobs:
       # Step 5: Install YQ
       - name: Install YQ
         run: |
-          sudo add-apt-repository ppa:rmescandon/yq \
-          && apt update \
-          && apt install yq -y
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
       
       # Step 5: Connect to Tyk Opeartor hosted on EKS Cluster
       - name: Connect to Tyk Operator
