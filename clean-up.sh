@@ -48,8 +48,9 @@ for api in "${apis[@]}"; do
         echo "API FOUND"
     else
         # API not found in source of truth
-        echo "API NOT FOUND: Cleaning up api..."
-        kubectl get tykapis $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
+        echo "API NOT FOUND: Cleaning up API: ${api}"
+        echo "kubectl get tykapis $api -o json | jq 'del(.metadata.finalizers)'"
+        echo "kubectl delete tykapis $api"
     fi
 done
 
@@ -63,7 +64,8 @@ for policy in "${policies[@]}"; do
         echo "POLICY FOUND"
     else
         # Policy not found in source of truth
-        echo "POLICY NOT FOUND: Cleaning up policy..."
-        kubectl get tykpolicies $api -o json | jq 'del(.metadata.finalizers)' && kubectl delete tykapis $api;
+        echo "POLICY NOT FOUND: Cleaning up Policy: ${policy}"
+        echo "kubectl get tykpolicies $api -o json | jq 'del(.metadata.finalizers)'"
+        echo "kubectl delete tykapis $api"
     fi
 done
