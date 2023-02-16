@@ -5,6 +5,7 @@ validation=$(kubectl apply -f crds --dry-run=server 2>&1)
 
 if [[ "$validation" == *"error"* ]]
 then
+    echo "Validation failed:"
     echo $validation
     exit 1
 else
