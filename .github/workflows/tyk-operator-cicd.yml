@@ -93,15 +93,15 @@ jobs:
           echo "Current deployed APIs and Policies"
           kubectl get tykapis
           kubectl get tykpolicies
-          
-     # Step 8: Deploy CRDs - tykapis and tykpolicies
-      - name: Deploy CRDs
-        run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh
-          
-      # Step 9: Clean CRDs - tykapis and tyk poloicies
+      
+      # Step 8: Clean CRDs - tykapis and tyk poloicies
       - name: Cleanup CRDs
         run: |
           chmod +x ./clean-up.sh
           ./clean-up.sh
+          
+     # Step 9: Deploy CRDs - tykapis and tykpolicies
+      - name: Deploy CRDs
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
