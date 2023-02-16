@@ -80,29 +80,27 @@ jobs:
           sudo apt update
           sudo apt install yq -y
       
-      # Step 5: Connect to Tyk Opeartor hosted on EKS Cluster
+      # Step 6: Connect to Tyk Opeartor hosted on EKS Cluster
       - name: Connect to Tyk Operator
         run: |
           aws --version
           aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_CLUSTER }}
           kubectl get svc
           
-      # Step 6: Retrieve deployed tykapis and tykpolicies
+      # Step 7: Retrieve deployed tykapis and tykpolicies
       - name: Retrieve current deployed CRDs for APIs and Policies
         run: |
           echo "Current deployed APIs and Policies"
           kubectl get tykapis
           kubectl get tykpolicies
           
-     # Step 7: Deploy CRDs - tykapis and tykpolicies
+     # Step 8: Deploy CRDs - tykapis and tykpolicies
       - name: Deploy CRDs
         run: |
-          echo "Updated deployed APIs and Policies"
-          kubectl apply -f crds/
-          kubectl get tykapis
-          kubectl get tykpolicies
+          chmod +x ./deploy.sh
+          ./deploy.sh
           
-      # Step 8: Clean CRDs - tykapis and tyk poloicies
+      # Step 9: Clean CRDs - tykapis and tyk poloicies
       - name: Cleanup CRDs
         run: |
           chmod +x ./clean-up.sh
