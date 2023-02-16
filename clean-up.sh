@@ -2,7 +2,7 @@
 
 # Retrieve all yaml files
 files=()
-dir="/crds"
+dir="./crds"
 
 # Tykapis and tykpolicies
 curr_apis_policies=()
@@ -14,7 +14,7 @@ apis=( $(kubectl get tykapis -o json | jq -r '.items[].metadata.name') )
 policies=( $(kubectl get tykpolicies -o json | jq -r '.items[].metadata.name') )
 
 # Check if directory exists
-if [ "$(ls -A $dir)" ]; 
+if [ "$(ls -A $dir)" ]
 then
     echo "CRDs found!"
     files=(crds/*)

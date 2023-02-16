@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="/crds"
+dir="./crds"
 
 # Check if directory exists
 if [ "$(ls -A $dir)" ]; 
