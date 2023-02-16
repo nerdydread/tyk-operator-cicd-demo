@@ -14,6 +14,7 @@ apis=( $(kubectl get tykapis -o json | jq -r '.items[].metadata.name') )
 policies=( $(kubectl get tykpolicies -o json | jq -r '.items[].metadata.name') )
 
 # Check if directory exists
+echo "Checking if any CRDs exists.."
 if [ -d "$dir" ]
 then
     if [ "$(ls -A $dir)" ]
@@ -24,7 +25,7 @@ then
         echo "$dir is empty, no CRDs are found!"
     fi
 else
-    echo "Directory $dir not found."
+    echo "Directory $dir not found!"
 fi
 
 # Extract source of truth api and policies (github repo)
@@ -65,7 +66,7 @@ for policy in "${policies[@]}"; do
     else
         # Policy not found in source of truth
         echo "POLICY NOT FOUND: Cleaning up policy"
-        kubectl delete tykapis $policy
+        kubectl delete tykpolicies $policy
         kubectl get tykpolicies $policy -o json | jq 'del(.metadata.finalizers)'
     fi
 done
