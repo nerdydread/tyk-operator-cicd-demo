@@ -51,7 +51,7 @@ for api in "${apis[@]}"; do
         echo "API NOT FOUND: Cleaning up api"
         kubectl delete tykapis $api
         kubectl get tykapis $api -o json | jq 'del(.metadata.finalizers)'
-s    fi
+    fi
 done
 
 # Clean up tyk policies to match source of truth
