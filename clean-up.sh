@@ -14,12 +14,17 @@ apis=( $(kubectl get tykapis -o json | jq -r '.items[].metadata.name') )
 policies=( $(kubectl get tykpolicies -o json | jq -r '.items[].metadata.name') )
 
 # Check if directory exists
-if [ "$(ls -A $dir)" ]
+if [ -d "$dir" ]
 then
-    echo "CRDs found!"
-    files=(crds/*)
+    if [ "$(ls -A $dir)" ]
+    then
+        echo "CRDs found!"
+        files=(crds/*)
+    else
+        echo "$dir is empty, no CRDs are found!"
+    fi
 else
-    echo "$dir is empty, no CRDs are found!"
+    echo "Directory $dir not found."
 fi
 
 # Extract source of truth api and policies (github repo)
@@ -37,15 +42,15 @@ done
 for api in "${apis[@]}"; do
     echo "Syncing deployement with source of truth for $api"
     # Check if the api exists in the source of truth
-    if [[ " ${curr_apis_policies[*]} " =~ " ${api} " ]]; 
+    if [[ " ${curr_apis_policies[*]} " =~ " ${api} " ]]
         then
             # API found in source of truth
             echo "API FOUND"
         else
             # API not found in source of truth
             echo "API NOT FOUND: Cleaning up api..."
-            $(kubectl get tykapis $api -o yaml | yq 'del(.metadata.finalizers[])')
-            $(kubectl delete tykapis $api)
+            kubectl get tykapis $api -o yaml | yq 'del(.metadata.finalizers[])'
+            kubectl delete tykapis $api
     fi
 done
 
@@ -53,14 +58,14 @@ done
 for policy in "${policies[@]}"; do
     echo "Syncing deployement with source of truth for $policy"
     # Check if the policy exists in the source of truth
-    if [[ " ${curr_apis_policies[*]} " =~ " ${policy} " ]]; 
+    if [[ " ${curr_apis_policies[*]} " =~ " ${policy} " ]]
         then
             # Policy found in source of truth
             echo "POLICY FOUND"
         else
             # Policy not found in source of truth
             echo "POLICY NOT FOUND: Cleaning up policy..."
-            $(kubectl get tykpolicies $api -o yaml | yq 'del(.metadata.finalizers[])')
-            $(kubectl delete tykapis $api)
+            kubectl get tykpolicies $api -o yaml | yq 'del(.metadata.finalizers[])'
+            kubectl delete tykapis $api
     fi
 done
