@@ -34,7 +34,7 @@ for api in "${apis[@]}"; do
         else
             # API not found in source of truth
             echo "API NOT FOUND: Cleaning up api..."
-            $(kubectl get tykapis $api -o yaml | yq 'del(.metadata.finalizers[], .spec.contextRef[])')
+            $(kubectl get tykapis $api -o yaml | yq 'del(.metadata.finalizers[])')
             $(kubectl delete tykapis $api)
     fi
 done
@@ -50,7 +50,7 @@ for policy in "${policies[@]}"; do
         else
             # Policy not found in source of truth
             echo "POLICY NOT FOUND: Cleaning up policy..."
-            $(kubectl get tykpolicies $api -o yaml | yq 'del(.metadata.finalizers[], .spec.contextRef[])')
+            $(kubectl get tykpolicies $api -o yaml | yq 'del(.metadata.finalizers[])')
             $(kubectl delete tykapis $api)
     fi
 done
