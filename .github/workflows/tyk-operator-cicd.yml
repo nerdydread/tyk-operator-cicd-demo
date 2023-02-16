@@ -64,7 +64,6 @@ jobs:
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
           echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
-          ls -l ./crds
           kubectl version --client --output=yaml
           
       # Step 4: Install JQ
